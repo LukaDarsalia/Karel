@@ -490,13 +490,14 @@ function pickBeeper() {
 }
 
 //* On Click Run User's Script
-function run() {
+function run(b=[[2,0],[2,0],[2,0],[2,0],[3,0],[3,0],[3,0],[3,0]]) {
   ctx.clearRect(0, 0, width, height);
   ctx.beginPath();
   x = 0;
   y = 0;
   rotate = 0;
-  beepers = [[2,0],[2,0],[2,0],[2,0],[3,0],[3,0],[3,0],[3,0]];
+  beepers = b;
+  console.log(b);
   karel();
   let code = localStorage
     .getItem("code")
@@ -518,79 +519,3 @@ setTimeout(() => {
 
 
 
-/*
-move();
-move();
-turnLeft();
-
-async function comingBack(){
-    turnAround();
-    while(frontIsClear()){
-        move();
-    }
-    turnAround();
-}
-
-while(beepersPresent()){
-    pickBeeper();
-    if(beepersPresent()===false){
-        putBeeper();
-        turnLeft();
-        move();
-        turnAround();
-    }else{
-        while(beepersPresent()){
-            move();
-        }
-        putBeeper();
-        await comingBack();
-    }
-}
-
-move();
-move();
-turnAround();
-pickBeeper();
-
-while(beepersPresent()){
-    pickBeeper();
-    move();
-    turnRight();
-    while(beepersPresent()){
-        console.log(beepers);
-        putBeeper();
-        move();
-    }
-    await comingBack();
-    turnRight();
-    move();
-    turnAround();
-}
-
-move();
-turnRight();
-async function summing(){
-    while(beepersPresent()){
-        pickBeeper();
-        move();
-        putBeeper();
-        await comingBack();
-    }
-    while(!beepersPresent()){
-        move();
-    }
-    if(frontIsClear()){
-        move();
-        if(beepersPresent()){
-            turnAround();
-            move();
-            turnAround();
-        }
-    }
-    
-}
-
-while(beepersPresent()){
-    await summing();
-}
-*/

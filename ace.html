@@ -33,9 +33,7 @@
             document.getElementById('editor').style.fontSize='1.3rem';
 
             $("#editor").on("keyup", function (e) {
-                if(e.originalEvent.key.length===1){
-                    localStorage.setItem("code", editor.getValue());
-                }
+              localStorage.setItem("code", editor.getValue());
             });
             
             
