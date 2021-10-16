@@ -1,6 +1,6 @@
 //* Constant Variables
-const height = document.getElementById("myCanvas").height;
-const width = document.getElementById("myCanvas").width;
+var height = document.getElementById("myCanvas").height;
+var width = document.getElementById("myCanvas").width;
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -55,21 +55,31 @@ var beepers = [[2,0],[2,0],[2,0],[2,0],[3,0],[3,0],[3,0],[3,0]];
 var x = 0;
 var y = 0;
 var rotate = 0;
+//* Size Of The Map
+var aspectRatio = 8;
+var size = 50;
+
+var sizeX = 8;
+
+var sizeY = 8
+
+document.getElementById("myCanvas").height = size*sizeY;
+document.getElementById("myCanvas").width = size*sizeX;
+
+height = document.getElementById("myCanvas").height;
+width = document.getElementById("myCanvas").width;
 
 //* Canvas From HTML
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 ctx.beginPath();
 
-//* Size Of The Map
-var aspectRatio = 8;
-var size = height / aspectRatio;
 
 function drawMap() {
   //* Creating Rectangles
-  for (var i = 0; i !== height; i += size) {
-    for (var o = 0; o !== width; o += size) {
-      ctx.rect(i, o, size, size);
+  for (var i = 0; i !== sizeX; i++) {
+    for (var o = 0; o !== sizeY; o++) {
+      ctx.rect(i*size, o*size, size, size);
     }
   }
   ctx.stroke();
@@ -89,49 +99,43 @@ function drawDog() {
 
 //* Size Changer
 $(function () {
-  $("input").keydown(function () {
-    // Save old value.
-    if (
-      !$(this).val() ||
-      (parseInt($(this).val()) <= 30 && parseInt($(this).val()) >= 0)
-    )
-      $(this).data("old", $(this).val());
-  });
-  $("input").keyup(function () {
-    // Check correct, else revert back to old value.
-    if (
-      !$(this).val() ||
-      (parseInt($(this).val()) <= 30 && parseInt($(this).val()) >= 0)
-    );
-    else $(this).val($(this).data("old"));
+  $("input").keyup(function (e) {
+    if(e.target.value.includes("x")){
+      var i = e.target.value.split("x");
+      try {
+        sizeX=parseInt(i[0]);
+        sizeY=parseInt(i[1]);
+      } catch(e) {
+        // statements
+        console.log(e);
+      }
+      
+    }
+    if(e.target.value.includes("X")){
+      var i = e.target.value.split("X");
+      try {
+        sizeX=parseInt(i[0]);
+        sizeY=parseInt(i[1]);
+      } catch(e) {
+        // statements
+        console.log(e);
+      }
+      
+    }
   });
 });
-$("input").keydown(function (e) {
-  if (e.originalEvent.code === "Enter") {
-    console.log(typeof parseInt($(this).val()));
-    ctx.clearRect(0, 0, width, height);
-    ctx.beginPath();
-    x = 0;
-    y = 0;
-    rotate = 0;
-    aspectRatio = parseInt($(this).val());
-    size = height / aspectRatio;
-    karel();
-  }
-});
-
 //* Wait 500ms And Turn Left
 async function turnLeft() {
   await sleep(200);
   if (rotate === 0) {
-    ctx.clearRect(x * size + 1, 600 - size + 1 - size * y, size - 2, size - 2);
+    ctx.clearRect(x * size + 1, height - size + 1 - size * y, size - 2, size - 2);
     if (beepersPresent() === true) {
       drawBeeper();
     }
     ctx.drawImage(dog_image_90, x * size, height - size - size * y, size, size);
     rotate = 90;
   } else if (rotate === 90) {
-    ctx.clearRect(x * size + 1, 600 - size + 1 - size * y, size - 2, size - 2);
+    ctx.clearRect(x * size + 1, height  - size + 1 - size * y, size - 2, size - 2);
     if (beepersPresent() === true) {
       drawBeeper();
     }
@@ -144,7 +148,7 @@ async function turnLeft() {
     );
     rotate = 180;
   } else if (rotate === 180) {
-    ctx.clearRect(x * size + 1, 600 - size + 1 - size * y, size - 2, size - 2);
+    ctx.clearRect(x * size + 1, height - size + 1 - size * y, size - 2, size - 2);
     if (beepersPresent() === true) {
       drawBeeper();
     }
@@ -157,7 +161,7 @@ async function turnLeft() {
     );
     rotate = 270;
   } else if (rotate === 270) {
-    ctx.clearRect(x * size + 1, 600 - size + 1 - size * y, size - 2, size - 2);
+    ctx.clearRect(x * size + 1, height - size + 1 - size * y, size - 2, size - 2);
     if (beepersPresent() === true) {
       drawBeeper();
     }
@@ -169,14 +173,14 @@ async function turnLeft() {
 //* Turn Left Immediately
 function turnLeftNotAsync() {
   if (rotate === 0) {
-    ctx.clearRect(x * size + 1, 600 - size + 1 - size * y, size - 2, size - 2);
+    ctx.clearRect(x * size + 1, height - size + 1 - size * y, size - 2, size - 2);
     if (beepersPresent() === true) {
       drawBeeper();
     }
     ctx.drawImage(dog_image_90, x * size, height - size - size * y, size, size);
     rotate = 90;
   } else if (rotate === 90) {
-    ctx.clearRect(x * size + 1, 600 - size + 1 - size * y, size - 2, size - 2);
+    ctx.clearRect(x * size + 1, height - size + 1 - size * y, size - 2, size - 2);
     if (beepersPresent() === true) {
       drawBeeper();
     }
@@ -189,7 +193,7 @@ function turnLeftNotAsync() {
     );
     rotate = 180;
   } else if (rotate === 180) {
-    ctx.clearRect(x * size + 1, 600 - size + 1 - size * y, size - 2, size - 2);
+    ctx.clearRect(x * size + 1, height - size + 1 - size * y, size - 2, size - 2);
     if (beepersPresent() === true) {
       drawBeeper();
     }
@@ -202,7 +206,7 @@ function turnLeftNotAsync() {
     );
     rotate = 270;
   } else if (rotate === 270) {
-    ctx.clearRect(x * size + 1, 600 - size + 1 - size * y, size - 2, size - 2);
+    ctx.clearRect(x * size + 1, height - size + 1 - size * y, size - 2, size - 2);
     if (beepersPresent() === true) {
       drawBeeper();
     }
@@ -230,21 +234,21 @@ async function turnAround() {
 async function move() {
   await sleep(200);
   if (rotate === 0) {
-    ctx.clearRect(x * size + 1, 600 - size + 1 - size * y, size - 2, size - 2);
+    ctx.clearRect(x * size + 1, height - size + 1 - size * y, size - 2, size - 2);
     if (beepersPresent() === true) {
       drawBeeper();
     }
     x += 1;
     ctx.drawImage(dog_image, x * size, height - size - size * y, size, size);
   } else if (rotate === 90) {
-    ctx.clearRect(x * size + 1, 600 - size + 1 - size * y, size - 2, size - 2);
+    ctx.clearRect(x * size + 1, height - size + 1 - size * y, size - 2, size - 2);
     if (beepersPresent() === true) {
       drawBeeper();
     }
     y += 1;
     ctx.drawImage(dog_image_90, x * size, height - size - size * y, size, size);
   } else if (rotate === 180) {
-    ctx.clearRect(x * size + 1, 600 - size + 1 - size * y, size - 2, size - 2);
+    ctx.clearRect(x * size + 1, height - size + 1 - size * y, size - 2, size - 2);
     if (beepersPresent() === true) {
       drawBeeper();
     }
@@ -257,7 +261,7 @@ async function move() {
       size
     );
   } else if (rotate === 270) {
-    ctx.clearRect(x * size + 1, 600 - size + 1 - size * y, size - 2, size - 2);
+    ctx.clearRect(x * size + 1, height - size + 1 - size * y, size - 2, size - 2);
     if (beepersPresent() === true) {
       drawBeeper();
     }
@@ -270,7 +274,7 @@ async function move() {
       size
     );
   }
-  if (x < 0 || y < 0 || x > aspectRatio - 1 || y > aspectRatio - 1) {
+  if (x < 0 || y < 0 || x > sizeX - 1 || y > sizeY - 1) {
     alert("Front Is Blocked");
     throw "Front Is Blocked";
   }
@@ -344,7 +348,7 @@ function drawBeeper(xCord=x, yCord=y) {
 
 //* Put Beeper
 function putBeeper() {
-  ctx.clearRect(x * size + 1, 600 - size + 1 - size * y, size - 2, size - 2);
+  ctx.clearRect(x * size + 1, height - size + 1 - size * y, size - 2, size - 2);
   beepers.push([x, y]);
   drawBeeper();
 
@@ -380,7 +384,7 @@ function pickBeeper() {
     if (count > 1) {
       ctx.clearRect(
         x * size + 1,
-        600 - size + 1 - size * y,
+        height - size + 1 - size * y,
         size - 2,
         size - 2
       );
@@ -444,7 +448,7 @@ function pickBeeper() {
     } else {
       ctx.clearRect(
         x * size + 1,
-        600 - size + 1 - size * y,
+        height - size + 1 - size * y,
         size - 2,
         size - 2
       );
@@ -490,7 +494,7 @@ function pickBeeper() {
 }
 
 //* On Click Run User's Script
-function run(b=[[2,0],[2,0],[2,0],[2,0],[3,0],[3,0],[3,0],[3,0]]) {
+function run(b=beepers) {
   ctx.clearRect(0, 0, width, height);
   ctx.beginPath();
   x = 0;
@@ -513,9 +517,19 @@ function karel() {
   drawMap();
   drawDog();
 }
+function reSize(){
+  document.getElementById("myCanvas").height = size*sizeY;
+document.getElementById("myCanvas").width = size*sizeX;
+
+height = document.getElementById("myCanvas").height;
+width = document.getElementById("myCanvas").width;
+  karel();
+}
+function reset(){
+  ctx.clearRect(0, 0, width, height);
+  karel();
+}
 setTimeout(() => {
   karel();
 }, 1000);
-
-
 

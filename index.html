@@ -13,10 +13,11 @@
     <div id="buts">
         <button class="button-29" role="button" onclick="run()">Run Karel Run!</button>
         <div class="form__group field">
-            <input type="number" min=3 class="form__field" placeholder="Size" name="name" id='name' required  autocomplete="off"/>
-            <label for="name" class="form__label">Size</label>
+            <input type="text" class="form__field" placeholder="Size" name="name" id='name' required  autocomplete="off"/>
+            <label for="name" class="form__label">8x8</label>
          </div>
-         <button class="button-29" role="button" onclick="run([])">Remove Beepers</button>
+         <button class="button-29" role="button" onclick="reSize([])">+</button>
+         <button class="button-29" role="button" onclick="reset([])">Reset</button>
     </div>
     
     <iframe src="ace.html" style="width: 800px; height: 800px"></iframe>
