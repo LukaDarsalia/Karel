@@ -10,16 +10,26 @@
   </head>
   <body>
     <canvas id="myCanvas" width="600" height="600"></canvas>
-    <div id="buts">
+    <div class="buts">
         <button class="button-29" role="button" onclick="run()">Run Karel Run!</button>
         <div class="form__group field">
-            <input type="text" class="form__field" placeholder="Size" name="name" id='name' required  autocomplete="off"/>
-            <label for="name" class="form__label">8x8</label>
+            <input type="text" class="form__field" placeholder="Size" name="size" id='size' required  autocomplete="off"/>
+            <label for="size" class="form__label">Set Size(8x8)</label>
          </div>
          <button class="button-29" role="button" onclick="reSize([])">+</button>
          <button class="button-29" role="button" onclick="reset([])">Reset</button>
     </div>
-    
+
+      <div class="buts">
+            <div class="form__group field">
+        <textarea rows="3" cols="20" type="text" class="form__field" placeholder="Size" name="beepers" id='beepers' required  autocomplete="off" style="width: auto;"></textarea>
+            <label for="beepers" class="form__label">Put Beepers(2x1 - 2)</label>
+         </div>
+         <button class="button-29" role="button" onclick="addBeeper()">+</button>
+             </div>
+         
+  
+            
     <iframe src="ace.html" style="width: 800px; height: 800px"></iframe>
     <script src="index.js"></script>
   </body>

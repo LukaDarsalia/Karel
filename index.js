@@ -49,7 +49,7 @@ var dog_image_270 = new Image();
 dog_image_270.src = "img/Dog_270.png";
 
 //* Beppers Location
-var beepers = [[2,0],[2,0],[2,0],[2,0],[3,0],[3,0],[3,0],[3,0]];
+var beepers = [];
 
 //* Dog Position
 var x = 0;
@@ -124,6 +124,36 @@ $(function () {
     }
   });
 });
+
+// Put Beepers From UI
+function addBeeper(){
+  if($("#beepers").val().includes("x") || $("#beepers").val().includes("X") && $("#beepers").val().includes("-")){
+      $("#beepers").val().trim().toLowerCase();
+      let addingBeepers = $("#beepers").val().split("\n");
+      addingBeepers = addingBeepers.map((i)=>i.split("-"));
+      addingBeepers.map((i)=>{
+        var cord = i[0].split("x");
+        try {
+          // statements
+          beepersAdding(parseInt(cord[0].trim()),parseInt(cord[1].trim()),i[1]);
+        } catch(e) {
+          // statements
+          console.log(e);
+        }
+        
+      });
+    }
+    ctx.clearRect(0, 0, width, height);
+    karel();
+}
+
+function beepersAdding(x,y,n){
+  for (var i = 0; i < n; i++) {
+    beepers.push([x-1,y-1]);
+  }
+}
+
+
 //* Wait 500ms And Turn Left
 async function turnLeft() {
   await sleep(200);
@@ -501,16 +531,13 @@ function run(b=beepers) {
   y = 0;
   rotate = 0;
   beepers = b;
-  console.log(b);
   karel();
-  let code = localStorage
-    .getItem("code")
-    .replace(/(\r\n|\n|\r)/gm, " ")
-    .replaceAll("move();", "await move();")
-    .replaceAll("turnLeft();", "await turnLeft();")
-    .replaceAll("turnRight();", "await turnRight();")
-    .replaceAll("turnAround();", "await turnAround();");
-  eval("(async () => {" + code + "})()");
+  //* Adds await and async to functions
+  let codeList = localStorage.getItem("code").split("\n");
+  codeList = codeList.map((i)=>(i.includes("();") ? i="await "+i : i=i));
+  codeList = codeList.map((i)=>(i.includes("function") ? i="async "+i : i=i));
+  codeList = codeList.join("\n");
+  eval("(async () => {" + codeList + "})()");
 }
 
 function karel() {
@@ -526,6 +553,7 @@ width = document.getElementById("myCanvas").width;
   karel();
 }
 function reset(){
+  beepers=[];
   ctx.clearRect(0, 0, width, height);
   karel();
 }
