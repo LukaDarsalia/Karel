@@ -5,10 +5,66 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@1,200&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="styles.css" />
     <title>Karel</title>
   </head>
   <body>
+<div class="box">
+  <a class="button" href="#popup1">Instructions</a>
+</div>
+
+<div id="popup1" class="overlay">
+  <div class="popup">
+    <h2>I'm Karel</h2>
+    <a class="close" href="#">&times;</a>
+    <div class="content">
+      I need your help chad person. I know some moves and conditions but can't accomplish several tasks.
+      <br>
+      <br>
+      Here I'll tell you all I know
+      <br>
+      <br>
+      <span class="coding">move(); </span>
+      <br>
+      <span class="coding">turnLeft(); </span>
+      <br>
+      <span class="coding">turnRight(); </span>
+      <br>
+      <span class="coding">putBeeper(); </span>
+      <br>
+      <span class="coding">pickBeeper(); </span>
+      <br>
+      <span class="coding">frontIsClear(); </span>
+      <span class="coding">frontIsBlocked(); </span>
+      <br>
+      <span class="coding">leftIsClear(); </span>
+      <span class="coding">leftIsBlocked(); </span>
+      <br>
+      <span class="coding">rightIsClear(); </span>
+      <span class="coding">rightIsBlocked(); </span>
+      <br>
+      <span class="coding">beepersPresent(); </span>
+      <span class="coding">noBeepersPresent(); </span>
+      <br>
+      <span class="coding">facingNorth(); </span>
+      <span class="coding">notFacingNorth(); </span>
+      <br>
+      <span class="coding">facingEast(); </span>
+      <span class="coding">notFacingEast(); </span>
+      <br>
+      <span class="coding">facingSouth(); </span>
+      <span class="coding">notFacingSouth(); </span>
+      <br>
+      <span class="coding">facingWest(); </span>
+      <span class="coding">notFacingWest(); </span>
+    </div>
+  </div>
+</div>
+    
     <canvas id="myCanvas" width="600" height="600"></canvas>
     <div class="buts">
         <button class="button-29" role="button" onclick="run()">Run Karel Run!</button>
