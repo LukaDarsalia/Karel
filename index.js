@@ -154,7 +154,9 @@ function beepersAdding(x,y,n){
 }
 
 
-//* Wait 500ms And Turn Left
+/**
+ *  Waits 500ms And Turn Left
+ */
 async function turnLeft() {
   await sleep(200);
   if (rotate === 0) {
@@ -245,7 +247,9 @@ function turnLeftNotAsync() {
   }
 }
 
-//* Wait 500ms And Turn Right
+/**
+ * Wait 500ms And Turn Right
+ */
 async function turnRight() {
   await sleep(200);
   turnLeftNotAsync();
@@ -253,14 +257,25 @@ async function turnRight() {
   turnLeftNotAsync();
 }
 
-//* Wait 500ms And Turn Around
+// Turn Right Immediately
+function turnRightNotAsync() {
+  turnLeftNotAsync();
+  turnLeftNotAsync();
+  turnLeftNotAsync();
+}
+
+/**
+ * Wait 500ms And Turn Around
+ */
 async function turnAround() {
   await sleep(200);
   turnLeftNotAsync();
   turnLeftNotAsync();
 }
 
-//* Move Conditions
+/**
+ * Karel makes move
+ */
 async function move() {
   await sleep(200);
   if (rotate === 0) {
@@ -310,12 +325,20 @@ async function move() {
   }
 }
 
-//* Check If Beepers Exists On Current Location
+/**
+ * Checks If Beepers Exists On Current Location
+ */
 function beepersPresent(xCord=x, yCord=y) {
   return beepers.some((i) => i[0] === xCord && i[1] === yCord);
 }
 
-//* Check If Front Is Clear
+function noBeepersPresent(){
+  return (!beepersPresent());
+}
+
+/*
+ * Checks If Front Is Clear
+ */
 function frontIsClear() {
   if (rotate === 0) {
     return x < aspectRatio - 1;
@@ -328,9 +351,51 @@ function frontIsClear() {
   }
 }
 
-//* Check If Front Is Not Clear
+/**
+ *  Checks If Front Is Not Clear
+ */
 function frontIsBlocked() {
   return !frontIsClear();
+}
+
+/**
+ *  Checks If Left Is Clear
+ */
+function leftIsClear() {
+  turnLeftNotAsync();
+  var result = frontIsClear();
+  turnRightNotAsync();
+  return(result);
+}
+
+/**
+ *  Checks If Left Is Not Clear
+ */
+function leftIsBlocked() {
+  turnLeftNotAsync();
+  var result = frontIsBlocked();
+  turnRightNotAsync();
+  return(result);
+}
+
+/**
+ *  Checks If right Is Clear
+ */
+function rightIsClear() {
+  turnRightNotAsync();
+  var result = frontIsClear();
+  turnLeftNotAsync();
+  return(result);
+}
+
+/**
+ *  Checks If right Is Not Clear
+ */
+function rightIsBlocked() {
+  turnRightNotAsync();
+  var result = frontIsBlocked();
+  turnLeftNotAsync();
+  return(result);
 }
 
 //* Draw Beeper
@@ -376,7 +441,66 @@ function drawBeeper(xCord=x, yCord=y) {
   }
 }
 
-//* Put Beeper
+
+/**
+ * Checks if Karel is looking to north
+ */
+function facingNorth(){
+  return (rotate===90);
+}
+
+/**
+ * Checks if Karel is looking to east
+ */
+function facingEast(){
+  return (rotate===0);
+}
+
+/**
+ * Checks if Karel is looking to west
+ */
+function facingWest(){
+  return (rotate===180);
+}
+
+/**
+ * Checks if Karel is looking to south
+ */
+function facingSouth(){
+  return (rotate===270);
+}
+
+/**
+ * Checks if Karel isn't looking to north
+ */
+function notFacingNorth(){
+  return (!facingNorth());
+}
+
+/**
+ * Checks if Karel isn't looking to east
+ */
+function notFacingEast(){
+  return (!facingEast());
+}
+
+/**
+ * Checks if Karel isn't looking to west
+ */
+function notFacingWest(){
+  return (!facingWest());
+}
+
+/**
+ * Checks if Karel isn't looking to south
+ */
+function notFacingSouth(){
+  return (!facingSouth());
+}
+
+/**
+ *  Puts Beeper
+ */
 function putBeeper() {
   ctx.clearRect(x * size + 1, height - size + 1 - size * y, size - 2, size - 2);
   beepers.push([x, y]);
@@ -405,6 +529,9 @@ function putBeeper() {
   }
 }
 
+/**
+ * Picks beeper
+ */
 function pickBeeper() {
   var count = 0;
   if (beepersPresent()) {
