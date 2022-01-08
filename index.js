@@ -63,6 +63,8 @@ var sizeX = 8;
 
 var sizeY = 8
 
+var toggleAddingBeepers = false;
+
 document.getElementById("myCanvas").height = size*sizeY;
 document.getElementById("myCanvas").width = size*sizeX;
 
@@ -125,34 +127,97 @@ $(function () {
   });
 });
 
-// Put Beepers From UI
-function addBeeper(){
-  if($("#beepers").val().includes("x") || $("#beepers").val().includes("X") && $("#beepers").val().includes("-")){
-      $("#beepers").val().trim().toLowerCase();
-      let addingBeepers = $("#beepers").val().split("\n");
-      addingBeepers = addingBeepers.map((i)=>i.split("-"));
-      addingBeepers.map((i)=>{
-        var cord = i[0].split("x");
-        try {
-          // statements
-          beepersAdding(parseInt(cord[0].trim()),parseInt(cord[1].trim()),i[1]);
-        } catch(e) {
-          // statements
-          console.log(e);
-        }
-        
-      });
-    }
-    ctx.clearRect(0, 0, width, height);
-    karel();
-}
+// Warn if overriding existing method
+if(Array.prototype.equals)
+    console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+// attach the .equals method to Array's prototype to call it on any array
+Array.prototype.equals = function (array) {
+    // if the other array is a falsy value, return
+    if (!array)
+        return false;
 
-function beepersAdding(x,y,n){
-  for (var i = 0; i < n; i++) {
-    beepers.push([x-1,y-1]);
+    // compare lengths - can save a lot of time 
+    if (this.length != array.length)
+        return false;
+
+    for (var i = 0, l=this.length; i < l; i++) {
+        // Check if we have nested arrays
+        if (this[i] instanceof Array && array[i] instanceof Array) {
+            // recurse into the nested arrays
+            if (!this[i].equals(array[i]))
+                return false;       
+        }           
+        else if (this[i] != array[i]) { 
+            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+            return false;   
+        }           
+    }       
+    return true;
+}
+// Hide method from for-in loops
+Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+
+
+/**
+ * Handle button click and acts accordingly, if + is pressed
+ * addBeeper is called and if - is pressed, removeBeeper is called
+ * @param {*} a addBeeper or removeBeeper
+ *! @param {*} i if + is called this MUST BE 1, OTHERWISE ANYTHING ELSE
+ */
+function handler(a,i){
+  if(i===0){
+    document.getElementById("myCanvas").removeEventListener("mousedown", addBeeper);
+  }else{
+    document.getElementById("myCanvas").removeEventListener("mousedown", removeBeeper);
   }
+  
+  document.getElementById("myCanvas").addEventListener("mousedown", a);
 }
 
+/**
+ * Removes beeper on the mouse click
+ * @param {*} e MouseEvent
+ */
+function removeBeeper(e){
+  var mouseX = e.offsetX;
+  var mouseY = e.offsetY;
+
+  var onX = Math.floor(mouseX/(width/sizeX));
+  var onY = Math.floor(sizeY-mouseY/(height/sizeY));
+
+  beepers.forEach((i, index)=>{
+    if(i.equals([onX,onY])){
+        beepers.splice(index, 1);
+    }
+  });
+  
+  ctx.clearRect(0, 0, width, height);
+  ctx.beginPath();
+  x = 0;
+  y = 0;
+  rotate = 0;
+  karel();
+}
+
+/**
+ * Adds beepers on mouse click
+ * @param {*} e MouseEvent
+ */
+function addBeeper(e){
+  var mouseX = e.offsetX;
+  var mouseY = e.offsetY;
+
+  var onX = Math.floor(mouseX/(width/sizeX));
+  var onY = Math.floor(sizeY-mouseY/(height/sizeY));
+
+  beepers.push([onX,onY]);
+  ctx.clearRect(0, 0, width, height);
+  ctx.beginPath();
+  x = 0;
+  y = 0;
+  rotate = 0;
+  karel();
+}
 
 /**
  *  Waits 500ms And Turn Left
@@ -652,6 +717,8 @@ function pickBeeper() {
 
 //* On Click Run User's Script
 function run(b=beepers) {
+  document.getElementById("myCanvas").removeEventListener("mousedown", addBeeper);
+  toggleAddingBeepers=false;
   ctx.clearRect(0, 0, width, height);
   ctx.beginPath();
   x = 0;
@@ -673,10 +740,9 @@ function karel() {
 }
 function reSize(){
   document.getElementById("myCanvas").height = size*sizeY;
-document.getElementById("myCanvas").width = size*sizeX;
-
-height = document.getElementById("myCanvas").height;
-width = document.getElementById("myCanvas").width;
+  document.getElementById("myCanvas").width = size*sizeX;
+  height = document.getElementById("myCanvas").height;
+  width = document.getElementById("myCanvas").width;
   karel();
 }
 function reset(){
