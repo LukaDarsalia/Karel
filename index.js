@@ -406,9 +406,9 @@ function noBeepersPresent(){
  */
 function frontIsClear() {
   if (rotate === 0) {
-    return x < aspectRatio - 1;
+    return x < sizeX - 1;
   } else if (rotate === 90) {
-    return y < aspectRatio - 1;
+    return y < sizeY - 1;
   } else if (rotate === 180) {
     return x > 0;
   } else if (rotate === 270) {
