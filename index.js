@@ -749,6 +749,9 @@ function reset(){
   beepers=[];
   ctx.clearRect(0, 0, width, height);
   karel();
+  
+  ctx.clearRect(0, 0, width, height);
+  karel();
 }
 setTimeout(() => {
   karel();
